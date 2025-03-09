@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome To Calendar Tracker</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            animation: backgroundAnimation 5s infinite alternate;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(50, 30, 10, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(255, 165, 0, 0.5);
+            color: #ffcc66;
+            text-align: center;
+            display: none;
+        }
+
+        h2, h3 {
+            font-size: 26px;
+            font-weight: bold;
+            color: #ffcc66;
+        }
+
+        table {
+            background: rgba(30, 20, 10, 0.9);
+            border: 2px solid #ffcc66;
+            border-radius: 10px;
+            margin-top: 15px;
+            padding: 10px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ffcc66;
+            color: white;
+            font-size: 18px;
+        }
+
+        th {
+            background: #ff9900;
+            color: black;
+            font-weight: bold;
+        }
+
+        td:hover {
+            background: #ffcc66;
+            color: black;
+            transform: scale(1.1);
+            transition: 0.3s;
+        }
+
+        .leap-year { 
+            background: #00ff00 !important; 
+            color: black !important;
+            font-weight: bold;
+        }
+
+        .message {
+            color: #ffcc66;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContent">
+        <h2 id='resultTitle'>Welcome To Calendar Tracker</h2>
+        <label for="date">Date:</label>
+        <input type="number" id="date" min="1" max="31">
+        <label for="month">Month:</label>
+        <select id="month"></select>
+        <label for="year">Year:</label>
+        <input type="number" id="year" min="1">
+        <button onclick="generateCalendar()">Generate</button>
+        <div id="calendar"></div>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+        }
+
+        function getDaysInMonth(month, year) {
+            const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            return month === 1 && isLeapYear(year) ? 29 : days[month];
+        }
+
+        function generateCalendar() {
+            document.getElementById("resultTitle").innerText = "Here Is Your Result. Thanks For Your Patience.";
+            document.getElementById("mainContent").style.display = "block";
+            const month = parseInt(document.getElementById("month").value);
+            const year = parseInt(document.getElementById("year").value);
+            const daysInMonth = getDaysInMonth(month, year);
+            const firstDay = new Date(year, month, 1).getDay();
+            const isLeap = isLeapYear(year) && month === 1;
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            let calendarHTML = `<h3>${monthNames[month]} ${year}</h3>`;
+            calendarHTML += `<table><tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr><tr>`;
+            
+            for (let i = 0; i < firstDay; i++) {
+                calendarHTML += "<td></td>";
+            }
+            
+            for (let day = 1; day <= daysInMonth; day++) {
+                const specialClass = isLeap && day === 29 ? 'leap-year' : '';
+                calendarHTML += `<td class="${specialClass}">${day}</td>`;
+                
+                if ((firstDay + day) % 7 === 0) {
+                    calendarHTML += "</tr><tr>";
+                }
+            }
+            
+            calendarHTML += "</tr></table>";
+            document.getElementById("calendar").innerHTML = calendarHTML;
+            
+            if (isLeap) {
+                document.getElementById("message").innerText = "This February Is Leap Year";
+            } else {
+                document.getElementById("message").innerText = "";
+            }
+        }
+
+        window.onload = function() {
+            const monthSelect = document.getElementById("month");
+            const yearInput = document.getElementById("year");
+            const currentYear = new Date().getFullYear();
+            
+            ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].forEach((m, i) => {
+                let option = new Option(m, i);
+                monthSelect.add(option);
+            });
+            
+            monthSelect.value = new Date().getMonth();
+            yearInput.value = currentYear;
+        }
+    </script>
+</body>
+</html>
