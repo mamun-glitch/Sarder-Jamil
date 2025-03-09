@@ -7,7 +7,6 @@
     <style>
         body {
             background: linear-gradient(135deg, #000000, #1a1a1a);
-            animation: backgroundAnimation 5s infinite alternate;
             margin: 0;
             padding: 0;
             display: flex;
@@ -41,6 +40,7 @@
             border-radius: 10px;
             margin-top: 15px;
             padding: 10px;
+            width: 100%;
         }
 
         th, td {
@@ -48,6 +48,7 @@
             border: 1px solid #ffcc66;
             color: white;
             font-size: 18px;
+            text-align: center;
         }
 
         th {
@@ -63,8 +64,8 @@
             transition: 0.3s;
         }
 
-        .leap-year { 
-            background: #00ff00 !important; 
+        .leap-year {
+            background: #00ff00 !important;
             color: black !important;
             font-weight: bold;
         }
@@ -78,7 +79,7 @@
 </head>
 <body>
     <div class="container" id="mainContent">
-        <h2 id='resultTitle'>Welcome To Calendar Tracker</h2>
+        <h2 id='resultTitle'>Here Is Your Result. Thanks For Your Patience.</h2>
         <label for="date">Date:</label>
         <input type="number" id="date" min="1" max="31">
         <label for="month">Month:</label>
@@ -101,8 +102,6 @@
         }
 
         function generateCalendar() {
-            document.getElementById("resultTitle").innerText = "Here Is Your Result. Thanks For Your Patience.";
-            document.getElementById("mainContent").style.display = "block";
             const month = parseInt(document.getElementById("month").value);
             const year = parseInt(document.getElementById("year").value);
             const daysInMonth = getDaysInMonth(month, year);
